@@ -1,0 +1,13 @@
+$bg_color: red;
+
+.card{
+  margin:{
+    top: 10px;
+    left: 10px;
+    right: 10px;
+  }
+}
+
+.red{
+  background-color: $bg_color;
+}

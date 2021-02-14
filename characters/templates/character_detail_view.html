@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="columns is-centered">
+        <div class="column is-one-quarter">
+            <div class="heading">#{{ character.api_id }}</div>
+            <img src="{{ character.image }}" alt="Image of {{ character.name }}"/>
+            <div class="title">{{ character.name }}</div>
+            <div class="level">
+                {% if character.status %}
+                    Alive
+                {% else %}
+                    Dead
+                {% endif %}
+            </div>
+            <div class="level">{{ character.gender }}</div>
+        </div>
+    </div>
+{% endblock %}

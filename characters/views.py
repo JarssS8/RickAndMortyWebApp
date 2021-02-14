@@ -6,18 +6,29 @@ import math
 from .models import Character
 
 characters_url = 'https://rickandmortyapi.com/api/character'
+characters = list(Character.objects.all())
+
+
+def character_detail(request, api_id):
+    context = {
+        'character': Character.objects.get(pk=api_id),
+    }
+    return HttpResponse(render(request, 'character_detail_view.html', context=context))
 
 
 def characters_list(request):
-    get_characters()
-    return HttpResponse("List of characters")
+    get_new_characters()
+    context = {
+        'characters': characters,
+    }
+    return HttpResponse(render(request, 'characters_list_view.html', context=context))
 
 
-def get_characters():
+def get_new_characters():
     count = requests.get(characters_url).json()['info']['count']
     characters_count = Character.objects.count()
     if characters_count < count:
-        page_to_start = math.trunc(characters_count/20) + 1
+        page_to_start = math.trunc(characters_count / 20) + 1
         last_id = Character.objects.order_by('api_id').last().api_id
         pages = requests.get(characters_url).json()['info']['pages']
         for i in range(page_to_start - 1, pages):
