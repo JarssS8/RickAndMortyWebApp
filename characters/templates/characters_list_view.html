@@ -3,18 +3,55 @@
 {% load static %}
 {% block content %}
     <div class="container">
-        <div class="columns is-multiline">
+        <section class="section">
+            <div class="columns is-multiline">
+                <div class="column is-four-fifths is-half-tablet">
+                    <label>
+                        <input class="input" type="text" placeholder="Filter by character name">
+                    </label>
+                </div>
+                <div class="column is-one-fifth is-half-tablet">
+                    <div class="dropdown is-pulled-right">
+                        <div class="dropdown-trigger">
+                            <button class="button" aria-haspopup="true" aria-controls="dropdown-menu2">
+                                <span>Sort list</span>
+                                <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                        </span>
+                            </button>
+                        </div>
+                        <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+                            <div class="dropdown-content">
+                                <div class="dropdown-item">
+                                    <a href="#">
+                                        <p>By name</p>
+                                    </a>
+                                </div>
+                                <hr class="dropdown-divider">
+                                <div class="dropdown-item">
+                                    <a href="#">
+                                        <p>By Id</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <div class="columns is-multiline characters-wrapper">
             {% for character in characters %}
-                <div class="column is-one-quarter-desktop is-half-tablet">
+                <div class="column is-one-quarter-desktop is-half-tablet character-box">
                     <div class="card is-fluid">
                         <div class="card-image">
                             <figure class="image is-fluid">
                                 <img src="{{ character.image }}" alt="">
                             </figure>
                             <div class="card-content is-overlay is-clipped">
-              <span class="tag is-info">
-                # {{ character.api_id }}
-              </span>
+                          <span class="tag is-info">
+                             # {{ character.api_id }}
+                          </span>
                             </div>
                         </div>
                         <footer class="card-footer">
@@ -24,11 +61,17 @@
                             <a class="card-footer-item">
                                 <i class="fas fa-heart"></i>
                             </a>
-
                         </footer>
                     </div>
                 </div>
             {% endfor %}
         </div>
+        <div class="load-more-characters center">
+            <button class="button button-to-reload" id="loadMoreBtn">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
     </div>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/characters.js' %}"></script>
 {% endblock %}

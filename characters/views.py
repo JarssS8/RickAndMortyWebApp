@@ -2,11 +2,13 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import requests
 import math
+from django.core import serializers
+from django.http import JsonResponse
 
 from .models import Character
 
 characters_url = 'https://rickandmortyapi.com/api/character'
-characters = list(Character.objects.all())
+characters_per_page = 12
 
 
 def character_detail(request, api_id):
@@ -18,6 +20,7 @@ def character_detail(request, api_id):
 
 def characters_list(request):
     get_new_characters()
+    characters = Character.objects.all().order_by('api_id')[:characters_per_page]
     context = {
         'characters': characters,
     }
@@ -45,3 +48,14 @@ def get_new_characters():
                     )
                     character_data.save()
             page_to_start = page_to_start + 1
+
+
+def load_more_characters(request):
+    offset = int(request.GET['offset'])
+    characters = Character.objects.all().order_by('api_id')[offset:characters_per_page + offset]
+    count_characters = Character.objects.count()
+    data = {
+        'characters': serializers.serialize('json', characters),
+        'countCharacters': count_characters
+    }
+    return JsonResponse(data)
