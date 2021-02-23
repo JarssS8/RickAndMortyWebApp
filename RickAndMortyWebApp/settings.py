@@ -125,3 +125,5 @@ STATIC_ROOT = ''
 STATICFILES_DIRS = (
     'static',
 )
+
+ALLOWED_HOSTS = ['*']

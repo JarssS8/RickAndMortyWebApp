@@ -20,9 +20,8 @@ def character_detail(request, api_id):
 
 def characters_list(request):
     get_new_characters()
-    characters = Character.objects.all().order_by('api_id')[:characters_per_page]
     context = {
-        'characters': characters,
+        'characters': get_characters_order_by(order='api_id'),
     }
     return HttpResponse(render(request, 'characters_list_view.html', context=context))
 
@@ -52,10 +51,35 @@ def get_new_characters():
 
 def load_more_characters(request):
     offset = int(request.GET['offset'])
-    characters = Character.objects.all().order_by('api_id')[offset:characters_per_page + offset]
+    order = request.GET['order']
+    characters = Character.objects.all().order_by(order)[offset:characters_per_page + offset]
     count_characters = Character.objects.count()
     data = {
         'characters': serializers.serialize('json', characters),
         'countCharacters': count_characters
+    }
+    return JsonResponse(data)
+
+
+def get_characters_order_by(order):
+    characters = Character.objects.all().order_by(order)[:characters_per_page]
+    return characters
+
+
+def change_characters_sort(request):
+    order = request.GET['order']
+    characters = get_characters_order_by(order)
+    data = {
+        'characters': serializers.serialize('json', characters),
+    }
+    return JsonResponse(data)
+
+
+def get_filter_characters(request):
+    filter_text = request.GET['filter_text']
+    order = request.GET['order']
+    characters = Character.objects.filter(name__contains=filter_text).order_by(order)
+    data = {
+        'characters': serializers.serialize('json', characters),
     }
     return JsonResponse(data)

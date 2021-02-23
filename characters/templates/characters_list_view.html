@@ -7,11 +7,11 @@
             <div class="columns is-multiline">
                 <div class="column is-four-fifths is-half-tablet">
                     <label>
-                        <input class="input" type="text" placeholder="Filter by character name">
+                        <input id="searchCharacter" class="input" type="text" placeholder="Filter by character name">
                     </label>
                 </div>
                 <div class="column is-one-fifth is-half-tablet">
-                    <div class="dropdown is-pulled-right">
+                    <div class="dropdown is-pulled-right" id="sortCharacters">
                         <div class="dropdown-trigger">
                             <button class="button" aria-haspopup="true" aria-controls="dropdown-menu2">
                                 <span>Sort list</span>
@@ -23,15 +23,17 @@
                         <div class="dropdown-menu" id="dropdown-menu2" role="menu">
                             <div class="dropdown-content">
                                 <div class="dropdown-item">
-                                    <a href="#">
-                                        <p>By name</p>
-                                    </a>
+                                    <input type="radio" id="sortById" name="sortCharacters" value="byId" checked>
+                                    <label for="sortById">
+                                        Sort by Id
+                                    </label>
                                 </div>
                                 <hr class="dropdown-divider">
                                 <div class="dropdown-item">
-                                    <a href="#">
-                                        <p>By Id</p>
-                                    </a>
+                                    <input type="radio" id="sortByName" name="sortCharacters" value="byName">
+                                    <label for="sortByName">
+                                        Sort by Name
+                                    </label>
                                 </div>
                             </div>
                         </div>
