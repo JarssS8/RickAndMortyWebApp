@@ -21,7 +21,7 @@ def character_detail(request, api_id):
 def characters_list(request):
     get_new_characters()
     context = {
-        'characters': get_characters_order_by(order='api_id'),
+        'characters': get_characters_order_by(order='api_id', filter_name=''),
     }
     return HttpResponse(render(request, 'characters_list_view.html', context=context))
 
@@ -52,8 +52,10 @@ def get_new_characters():
 def load_more_characters(request):
     offset = int(request.GET['offset'])
     order = request.GET['order']
-    characters = Character.objects.all().order_by(order)[offset:characters_per_page + offset]
-    count_characters = Character.objects.count()
+    filter_name = request.GET['filter_name']
+    characters = Character.objects.filter(name__contains=filter_name).order_by(order)[
+                 offset:characters_per_page + offset]
+    count_characters = Character.objects.filter(name__contains=filter_name).count()
     data = {
         'characters': serializers.serialize('json', characters),
         'countCharacters': count_characters
@@ -61,14 +63,15 @@ def load_more_characters(request):
     return JsonResponse(data)
 
 
-def get_characters_order_by(order):
-    characters = Character.objects.all().order_by(order)[:characters_per_page]
+def get_characters_order_by(order, filter_name):
+    characters = Character.objects.filter(name__contains=filter_name).order_by(order)[:characters_per_page]
     return characters
 
 
 def change_characters_sort(request):
     order = request.GET['order']
-    characters = get_characters_order_by(order)
+    filter_name = request.GET['filter_name']
+    characters = get_characters_order_by(order, filter_name)
     data = {
         'characters': serializers.serialize('json', characters),
     }
@@ -76,9 +79,9 @@ def change_characters_sort(request):
 
 
 def get_filter_characters(request):
-    filter_text = request.GET['filter_text']
+    filter_name = request.GET['filter_name']
     order = request.GET['order']
-    characters = Character.objects.filter(name__contains=filter_text).order_by(order)
+    characters = Character.objects.filter(name__contains=filter_name).order_by(order)[:characters_per_page]
     data = {
         'characters': serializers.serialize('json', characters),
     }

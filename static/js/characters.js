@@ -6,7 +6,8 @@ $(document).ready(function () {
             type: 'get',
             data: {
                 'offset': _currentCharacters,
-                'order': ($('input[type=radio][name=sortCharacters]')[0].checked ? 'api_id' : 'name')
+                'order': ($('input[type=radio][name=sortCharacters]')[0].checked ? 'api_id' : 'name'),
+                'filter_name': ($('#searchCharacter')[0].value)
             },
             dataType: 'json',
             beforeSend: function () {
@@ -29,7 +30,7 @@ $(document).ready(function () {
                         '                            </div>\n' +
                         '                        </div>\n' +
                         '                        <footer class="card-footer">\n' +
-                        '                            <a class="card-footer-item" href="/characters/detail/' + data.pk + '">\n' +
+                        '                            <a class="card-footer-item" href="/detail/' + data.pk + '">\n' +
                         '                            ' + data.fields.name +
                         '                            </a>\n' +
                         '                            <a class="card-footer-item">\n' +
@@ -43,7 +44,7 @@ $(document).ready(function () {
                 $(".characters-wrapper").append(_html);
                 let _countTotal = $(".character-box").length;
                 if (_countTotal == response.countCharacters) {
-                    $("#loadMoreBtn").remove();
+                    $("#loadMoreBtn").addClass('is-hidden');
                 } else {
                     $("#loadMoreBtn").removeClass('is-static is-loading');
                 }
@@ -57,7 +58,8 @@ $(document).ready(function () {
                 url: "change-characters-sort",
                 type: 'get',
                 data: {
-                    'order': 'api_id'
+                    'order': 'api_id',
+                    'filter_name': ($('#searchCharacter')[0].value)
                 },
                 dataType: 'json',
                 success: function (response) {
@@ -78,7 +80,7 @@ $(document).ready(function () {
                             '                            </div>\n' +
                             '                        </div>\n' +
                             '                        <footer class="card-footer">\n' +
-                            '                            <a class="card-footer-item" href="/characters/detail/' + data.pk + '">\n' +
+                            '                            <a class="card-footer-item" href="/detail/' + data.pk + '">\n' +
                             '                            ' + data.fields.name +
                             '                            </a>\n' +
                             '                            <a class="card-footer-item">\n' +
@@ -98,7 +100,8 @@ $(document).ready(function () {
                 url: "change-characters-sort",
                 type: 'get',
                 data: {
-                    'order': 'name'
+                    'order': 'name',
+                    'filter_name': ($('#searchCharacter')[0].value)
                 },
                 dataType: 'json',
                 success: function (response) {
@@ -119,7 +122,7 @@ $(document).ready(function () {
                             '                            </div>\n' +
                             '                        </div>\n' +
                             '                        <footer class="card-footer">\n' +
-                            '                            <a class="card-footer-item" href="/characters/detail/' + data.pk + '">\n' +
+                            '                            <a class="card-footer-item" href="/detail/' + data.pk + '">\n' +
                             '                            ' + data.fields.name +
                             '                            </a>\n' +
                             '                            <a class="card-footer-item">\n' +
@@ -142,6 +145,7 @@ $(document).ready(function () {
         let _searchBox = $('#searchCharacter');
         let upperSearch = _searchBox[0].value.toUpperCase();
         if (upperSearch.trim().length == 0) {
+            $("#loadMoreBtn").removeClass('is-hidden is-static is-loading');
             $.ajax({
                 url: "change-characters-sort",
                 type: 'get',
@@ -167,7 +171,7 @@ $(document).ready(function () {
                             '                            </div>\n' +
                             '                        </div>\n' +
                             '                        <footer class="card-footer">\n' +
-                            '                            <a class="card-footer-item" href="/characters/detail/' + data.pk + '">\n' +
+                            '                            <a class="card-footer-item" href="/detail/' + data.pk + '">\n' +
                             '                            ' + data.fields.name +
                             '                            </a>\n' +
                             '                            <a class="card-footer-item">\n' +
@@ -187,7 +191,7 @@ $(document).ready(function () {
                 url: "get-filter-characters",
                 type: 'get',
                 data: {
-                    'filter_text': _searchBox[0].value,
+                    'filter_name': _searchBox[0].value,
                     'order': ($('input[type=radio][name=sortCharacters]')[0].checked ? 'api_id' : 'name')
                 },
                 dataType: 'json',
@@ -209,7 +213,7 @@ $(document).ready(function () {
                             '                            </div>\n' +
                             '                        </div>\n' +
                             '                        <footer class="card-footer">\n' +
-                            '                            <a class="card-footer-item" href="/characters/detail/' + data.pk + '">\n' +
+                            '                            <a class="card-footer-item" href="/detail/' + data.pk + '">\n' +
                             '                            ' + data.fields.name +
                             '                            </a>\n' +
                             '                            <a class="card-footer-item">\n' +
